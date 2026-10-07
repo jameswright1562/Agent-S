@@ -1,0 +1,11 @@
+**/bin/
+**/obj/
+.vs/
+TestResults/
+*.user
+*.msix
+
+# Source build helpers and the MAUI manifest override the Python root ignores.
+!/build/
+!/build/**
+!/src/AgentS.Maui/Platforms/Windows/app.manifest

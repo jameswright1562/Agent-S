@@ -1,0 +1,10 @@
+<Project>
+  <Target Name="CopyBackend" AfterTargets="Build">
+    <ItemGroup><BackendFiles Include="$(MSBuildThisFileDirectory)../src/AgentS.Host/bin/$(Configuration)/net10.0-windows10.0.19041.0/**/*" /></ItemGroup>
+    <Copy SourceFiles="@(BackendFiles)" DestinationFiles="@(BackendFiles->'$(OutDir)backend/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+  <Target Name="PublishBackend" AfterTargets="Publish">
+    <ItemGroup><BackendPublishFiles Include="$(OutDir)backend/**/*" /></ItemGroup>
+    <Copy SourceFiles="@(BackendPublishFiles)" DestinationFiles="@(BackendPublishFiles->'$(PublishDir)backend/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

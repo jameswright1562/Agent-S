@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:vm="clr-namespace:AgentS.Maui.ViewModels" xmlns:views="clr-namespace:AgentS.Maui.Views" xmlns:core="clr-namespace:AgentS.Core;assembly=AgentS.Core" x:Class="AgentS.Maui.Views.MainPage" x:DataType="vm:MainViewModel" Title="Workspace">
+  <Grid Padding="24" RowDefinitions="Auto,*,Auto" RowSpacing="20">
+    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="20">
+      <HorizontalStackLayout Spacing="16">
+        <Border Padding="12,6" BackgroundColor="{StaticResource Accent}" StrokeThickness="0"><Label Text="S" TextColor="#152308" FontSize="24" FontAttributes="Bold" /></Border>
+        <VerticalStackLayout Spacing="2"><Label Text="Agent S" FontSize="26" FontAttributes="Bold" /><Label Text="YOUR DESKTOP, IN GOOD HANDS" FontSize="10" CharacterSpacing="2" TextColor="{StaticResource Muted}" /></VerticalStackLayout>
+      </HorizontalStackLayout>
+      <HorizontalStackLayout Grid.Column="1" Spacing="14" VerticalOptions="Center">
+        <ActivityIndicator IsRunning="{Binding IsBusy}" Color="{StaticResource Accent}" WidthRequest="24" />
+        <Label Text="{Binding Status}" VerticalOptions="Center" TextColor="{StaticResource Accent}" />
+        <Button Text="Reconnect" Command="{Binding ConnectCommand}" />
+      </HorizontalStackLayout>
+    </Grid>
+    <Grid Grid.Row="1" ColumnDefinitions="210,*,330" ColumnSpacing="20">
+      <ScrollView>
+      <Grid RowDefinitions="Auto,Auto" RowSpacing="16">
+        <Border>
+          <VerticalStackLayout Spacing="12">
+            <Label Text="Workspace" Style="{StaticResource SectionTitle}" />
+            <Label Text="Profiles keep planner, grounding, and run preferences together." Style="{StaticResource Caption}" />
+            <Picker ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedProfile}" ItemDisplayBinding="{Binding Name, x:DataType=core:Profile}" AutomationId="ProfilePicker" />
+            <Entry Text="{Binding ProfileName}" Placeholder="Profile name" />
+            <Button Text="Save profile" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}" />
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="8"><Button Text="New" Command="{Binding AddProfileCommand}" /><Button Grid.Column="1" Text="Delete" Command="{Binding DeleteProfileCommand}" /></Grid>
+            <BoxView HeightRequest="1" Color="{StaticResource Outline}" />
+            <Label Text="ChatGPT / Codex" FontAttributes="Bold" />
+            <Label Text="{Binding AccountStatus}" Style="{StaticResource Caption}" />
+            <Button Text="Sign in" Command="{Binding LoginCommand}" />
+            <Button Text="Refresh account" Command="{Binding AccountCommand}" />
+            <Button Text="Sign out" Command="{Binding LogoutCommand}" />
+          </VerticalStackLayout>
+        </Border>
+        <Border Grid.Row="1" HeightRequest="260">
+          <Grid RowDefinitions="Auto,*" RowSpacing="10">
+            <Label Text="Recent activity" Style="{StaticResource SectionTitle}" />
+            <CollectionView Grid.Row="1" ItemsSource="{Binding Tasks}" SelectedItem="{Binding SelectedTask}" SelectionMode="Single">
+              <CollectionView.EmptyView><Label Text="Your task history will appear here." Style="{StaticResource Caption}" /></CollectionView.EmptyView>
+              <CollectionView.ItemTemplate><DataTemplate x:DataType="core:TaskSnapshot"><VerticalStackLayout Padding="0,12" Spacing="4"><Label Text="{Binding Instruction}" MaxLines="2" LineBreakMode="TailTruncation" /><Label Text="{Binding State}" Style="{StaticResource Caption}" /><Label Text="{Binding CreatedAt, StringFormat='{0:g}'}" Style="{StaticResource Caption}" /></VerticalStackLayout></DataTemplate></CollectionView.ItemTemplate>
+            </CollectionView>
+          </Grid>
+        </Border>
+      </Grid>
+      </ScrollView>
+      <Grid Grid.Column="1" RowDefinitions="Auto,*,Auto" RowSpacing="16">
+        <Border>
+          <VerticalStackLayout Spacing="10">
+            <Label Text="What would you like to get done?" FontSize="22" FontAttributes="Bold" />
+            <Editor Text="{Binding Instruction}" Placeholder="Describe an exact task for the application you have open…" HeightRequest="90" AutomationId="TaskInstruction" />
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+              <Label Text="{Binding TaskStatus}" Style="{StaticResource Caption}" VerticalOptions="Center" />
+              <Button Grid.Column="1" Text="Stop task" Command="{Binding StopCommand}" IsEnabled="{Binding IsTaskActive}" />
+              <Button Grid.Column="2" Text="Run task  →" Command="{Binding LaunchCommand}" Style="{StaticResource PrimaryButton}" AutomationId="RunTaskButton" />
+            </Grid>
+          </VerticalStackLayout>
+        </Border>
+        <Border Grid.Row="1">
+          <Grid RowDefinitions="Auto,*,Auto" RowSpacing="12">
+            <Grid ColumnDefinitions="*,Auto"><Label Text="Desktop observation" Style="{StaticResource SectionTitle}" /><Button Grid.Column="1" Text="Capture" Command="{Binding CaptureCommand}" /></Grid>
+            <Grid Grid.Row="1" BackgroundColor="#081018">
+              <Label Text="A desktop screenshot will appear when a task starts.&#10;Capture takes a screenshot without calling a model." HorizontalTextAlignment="Center" VerticalOptions="Center" TextColor="{StaticResource Muted}" />
+              <Image Source="{Binding Screenshot}" Aspect="AspectFit" AutomationId="DesktopScreenshot" />
+            </Grid>
+            <Label Grid.Row="2" Text="The workspace minimizes during execution and returns when your approval is needed." Style="{StaticResource Caption}" />
+          </Grid>
+        </Border>
+        <Border Grid.Row="2" IsVisible="{Binding HasApproval}" Stroke="{StaticResource Accent}">
+          <VerticalStackLayout Spacing="10">
+            <Label Text="Your approval is needed" Style="{StaticResource SectionTitle}" />
+            <ScrollView HeightRequest="130"><Label Text="{Binding Preview}" FontFamily="Consolas" FontSize="12" /></ScrollView>
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10"><Button Text="Reject &amp; stop" Command="{Binding RejectCommand}" /><Button Grid.Column="1" Text="Approve this action" Command="{Binding ApproveCommand}" Style="{StaticResource PrimaryButton}" AutomationId="ApproveStepButton" /></Grid>
+          </VerticalStackLayout>
+        </Border>
+      </Grid>
+      <Border Grid.Column="2" Padding="16">
+        <ScrollView>
+          <VerticalStackLayout Spacing="12">
+            <Label Text="Agent configuration" Style="{StaticResource SectionTitle}" />
+            <Label Text="PLANNER" Style="{StaticResource Caption}" CharacterSpacing="2" />
+            <views:ProviderEditor BindingContext="{Binding Planner}" />
+            <Button Text="Discover planner models" Command="{Binding PlannerModelsCommand}" />
+            <BoxView HeightRequest="1" Color="{StaticResource Outline}" />
+            <Label Text="GROUNDING" Style="{StaticResource Caption}" CharacterSpacing="2" />
+            <views:ProviderEditor BindingContext="{Binding Grounding}" />
+            <Button Text="Discover grounding models" Command="{Binding GroundingModelsCommand}" />
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10"><VerticalStackLayout><Label Text="Grounding width" Style="{StaticResource Caption}" /><Entry Text="{Binding GroundWidth}" Keyboard="Numeric" /></VerticalStackLayout><VerticalStackLayout Grid.Column="1"><Label Text="Grounding height" Style="{StaticResource Caption}" /><Entry Text="{Binding GroundHeight}" Keyboard="Numeric" /></VerticalStackLayout></Grid>
+            <BoxView HeightRequest="1" Color="{StaticResource Outline}" />
+            <Label Text="RUN PREFERENCES" Style="{StaticResource Caption}" CharacterSpacing="2" />
+            <Label Text="Action approval" /><Picker ItemsSource="{Binding ApprovalModes}" SelectedItem="{Binding Approval}" />
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10"><VerticalStackLayout><Label Text="Step limit" Style="{StaticResource Caption}" /><Entry Text="{Binding MaxSteps}" Keyboard="Numeric" /></VerticalStackLayout><VerticalStackLayout Grid.Column="1"><Label Text="Monitor" Style="{StaticResource Caption}" /><Entry Text="{Binding Monitor}" Keyboard="Numeric" /></VerticalStackLayout></Grid>
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10"><VerticalStackLayout><Label Text="History images" Style="{StaticResource Caption}" /><Entry Text="{Binding HistoryImages}" Keyboard="Numeric" /></VerticalStackLayout><VerticalStackLayout Grid.Column="1"><Label Text="Inference timeout" Style="{StaticResource Caption}" /><Entry Text="{Binding TimeoutSeconds}" Keyboard="Numeric" /></VerticalStackLayout></Grid>
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10"><VerticalStackLayout><Label Text="Task timeout" Style="{StaticResource Caption}" /><Entry Text="{Binding TaskTimeout}" Keyboard="Numeric" /></VerticalStackLayout><VerticalStackLayout Grid.Column="1"><Label Text="Action timeout" Style="{StaticResource Caption}" /><Entry Text="{Binding ActionTimeout}" Keyboard="Numeric" /></VerticalStackLayout></Grid>
+            <Grid ColumnDefinitions="*,Auto"><Label Text="Reflect on progress" VerticalOptions="Center" /><Switch Grid.Column="1" IsToggled="{Binding EnableReflection}" /></Grid>
+            <Grid ColumnDefinitions="*,Auto"><Label Text="PowerShell code agent" VerticalOptions="Center" /><Switch Grid.Column="1" IsToggled="{Binding EnableCodeAgent}" /></Grid>
+            <VerticalStackLayout IsVisible="{Binding EnableCodeAgent}"><Label Text="Code step budget" Style="{StaticResource Caption}" /><Entry Text="{Binding CodeBudget}" Keyboard="Numeric" /></VerticalStackLayout>
+            <Label Text="Model discovery never generates a response. Blank key fields preserve encrypted credentials." Style="{StaticResource Caption}" />
+            <Label Text="STEP TIMELINE" Style="{StaticResource Caption}" CharacterSpacing="2" />
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Steps}" Spacing="10">
+              <BindableLayout.ItemTemplate><DataTemplate x:DataType="core:StepRecord"><Border Padding="10"><VerticalStackLayout Spacing="5"><Label Text="{Binding Number, StringFormat='Step {0}'}" FontAttributes="Bold" /><Label Text="{Binding State}" TextColor="{StaticResource Accent}" FontSize="12" /><Label Text="{Binding Analysis}" FontSize="12" /><Label Text="{Binding Reflection}" Style="{StaticResource Caption}" /><Label Text="{Binding Error}" TextColor="#FCA5A5" /></VerticalStackLayout></Border></DataTemplate></BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+          </VerticalStackLayout>
+        </ScrollView>
+      </Border>
+    </Grid>
+    <Label Grid.Row="2" Text="{Binding Message}" FontSize="12" TextColor="{StaticResource Muted}" MaxLines="3" LineBreakMode="WordWrap" AutomationId="WorkspaceStatus" />
+  </Grid>
+</ContentPage>

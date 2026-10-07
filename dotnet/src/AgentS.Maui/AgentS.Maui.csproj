@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>AgentS.Maui</RootNamespace>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <WindowsPackageType>None</WindowsPackageType>
+    <ApplicationTitle>Agent S</ApplicationTitle>
+    <ApplicationId>com.simular.agents.dotnet</ApplicationId>
+    <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.20" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <ProjectReference Include="../AgentS.Client/AgentS.Client.csproj" />
+    <ProjectReference Include="../AgentS.Host/AgentS.Host.csproj" ReferenceOutputAssembly="false" />
+    <MauiIcon Include="Resources/AppIcon/appicon.svg" Color="#111A24" />
+    <MauiSplashScreen Include="Resources/AppIcon/appicon.svg" Color="#111A24" BaseSize="128,128" />
+  </ItemGroup>
+  <Import Project="../../build/CopyBackend.targets" />
+</Project>

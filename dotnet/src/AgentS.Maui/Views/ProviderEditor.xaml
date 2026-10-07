@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:vm="clr-namespace:AgentS.Maui.ViewModels" xmlns:infra="clr-namespace:AgentS.Infrastructure;assembly=AgentS.Infrastructure" x:Class="AgentS.Maui.Views.ProviderEditor" x:DataType="vm:ProviderEditorViewModel">
+  <VerticalStackLayout Spacing="8">
+    <Picker Title="Provider" ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedPreset}" ItemDisplayBinding="{Binding Name, x:DataType=infra:ProviderPreset}" AutomationId="ProviderPicker" />
+    <Entry Placeholder="Model ID" Text="{Binding Model}" AutomationId="ModelEntry" />
+    <Picker Title="Discovered models" ItemsSource="{Binding Models}" SelectedItem="{Binding SelectedModel}" />
+    <Entry Placeholder="Endpoint URL" Text="{Binding BaseUrl}" Keyboard="Url" IsVisible="{Binding UsesHttp}" />
+    <Entry Placeholder="API key · blank preserves stored key" Text="{Binding ApiKey}" IsPassword="True" IsVisible="{Binding UsesHttp}" />
+    <HorizontalStackLayout Spacing="8" IsVisible="{Binding UsesHttp}"><CheckBox IsChecked="{Binding ClearKey}" /><Label Text="Remove saved API key" VerticalOptions="Center" Style="{StaticResource Caption}" /></HorizontalStackLayout>
+    <Entry Placeholder="Azure API version" Text="{Binding ApiVersion}" IsVisible="{Binding IsAzure}" />
+    <VerticalStackLayout IsVisible="{Binding IsCodex}" Spacing="8">
+      <Label Text="Codex runtime executable" Style="{StaticResource Caption}" /><Entry Text="{Binding RuntimePath}" />
+      <Label Text="Reasoning effort" Style="{StaticResource Caption}" /><Picker ItemsSource="{Binding Efforts}" SelectedItem="{Binding ReasoningEffort}" />
+    </VerticalStackLayout>
+  </VerticalStackLayout>
+</ContentView>

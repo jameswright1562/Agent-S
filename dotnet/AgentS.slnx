@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AgentS.Core/AgentS.Core.csproj" />
+    <Project Path="src/AgentS.Infrastructure/AgentS.Infrastructure.csproj" />
+    <Project Path="src/AgentS.Windows/AgentS.Windows.csproj" />
+    <Project Path="src/AgentS.Client/AgentS.Client.csproj" />
+    <Project Path="src/AgentS.Host/AgentS.Host.csproj" />
+    <Project Path="src/AgentS.Cli/AgentS.Cli.csproj" />
+    <Project Path="src/AgentS.Maui/AgentS.Maui.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AgentS.Tests/AgentS.Tests.csproj" />
+    <Project Path="tests/AgentS.FakeCodex/AgentS.FakeCodex.csproj" />
+    <Project Path="tests/AgentS.UISmoke/AgentS.UISmoke.csproj" />
+  </Folder>
+</Solution>

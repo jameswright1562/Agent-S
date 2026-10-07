@@ -166,3 +166,4 @@ logs/
 agent_s_ui_config.json
 # Agent S3 UI frontend build
 node_modules/
+.fake
